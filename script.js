@@ -6,4 +6,4 @@ function setup() {
     background(255);
   }
 
-  // AGREGANDO OTRO TEXTO PARA CALAR MI TERMINAL DE GIT
+  // AGREGANDO OTRO TEXTO PARA CALAR MI TERMINAL DE GIT, otro push de nuevo
