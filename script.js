@@ -53,4 +53,17 @@ function draw() {
     randomY *= -1;
     pelotaY = barraY - pelotaRadio;
   }
+
+  //toca suelo
+  if (pelotaY - pelotaRadio > height) {
+    reiniciar();
+  }
+}
+
+function reiniciar() {
+  barraX = (width - barraAncho) / 2;
+  pelotaX = width / 2;
+  pelotaY = barraY - pelotaRadio;
+  velocidadX = 4;
+  velocidadY = -4;
 }
