@@ -5,5 +5,3 @@ function setup() {
   function draw() {
     background(255);
   }
-
-  // AGREGANDO OTRO TEXTO PARA CALAR MI TERMINAL DE GIT, otro push de nuevo
