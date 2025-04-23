@@ -1,0 +1,24 @@
+body {
+    font-family: 'Press Start 2P', monospace;
+    background-color: #000000e0; 
+    text-align: center;
+    color: #f3f3f3;
+}
+
+h1 {
+    margin-top: 20px;
+    color: #ff7f50;
+    text-shadow: 0 0 5px #ff7f50, 0 0 10px #ff4500;
+}
+
+#score {
+    margin-bottom: 20px;
+    color: #7fffd4;
+    text-shadow: 0 0 3px #00ced1;
+}
+
+canvas {
+    border-radius: 12px;
+    box-shadow: 0 0 30px rgb(127, 255, 212);
+    border: 3px solid #ff7f50e6;
+}
