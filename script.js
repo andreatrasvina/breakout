@@ -112,28 +112,40 @@ function draw() {
     }
 
   } else {
+    let colorFondo;
+    let mensaje;
+  
     if (vidas === 3) {
       //inicio
-      fill(0, 255, 0, 150);
-      rect(0, 0, width, height);
-      
-      textAlign(CENTER, CENTER);
-      fill(255);
-      textSize(40);
-      text("presiona ESPACIO para iniciar", width / 2, height / 2);
-      
-    }else {
-      //desp de perder
-      fill(255, 0, 0, 150);
-      rect(0, 0, width, height);
-  
-      textAlign(CENTER, CENTER);
-      fill(255);
-      textSize(40);
-      text("¡lol q mal! presiona ESPACIO para reiniciar", width / 2, height / 2);
-    }
+      colorFondo = color(0, 255, 0, 150);
+      mensaje = "presiona ESPACIO para jugar";
 
+      //segundo nivel
+    } else if(nivel === 2 && puntaje === 40){
+      colorFondo = color(0, 0, 255, 150);
+      mensaje = "¡Nivel 2! presiona ESPACIO para continuar";
+    
+      //tercer nivel
+    } else if (nivel === 3 && puntaje === 90) {
+      colorFondo = color(255, 255, 0, 150);
+      mensaje = "¡Nivel 3! presiona ESPACIO para continuar";
+    
+    }else {
+      //desp perder
+      colorFondo = color(255, 0, 0, 150);
+      mensaje = "¡lol q mal! presiona ESPACIO para volver a intentarlo";
+    }
+  
+    //pantallas
+    fill(colorFondo);
+    rect(0, 0, width, height);
+    
+    textAlign(CENTER, CENTER);
+    fill(255);
+    textSize(40);
+    text(mensaje, width / 2, height / 2);
   }
+
   // Vidas
   fill(0);
   textSize(20);
