@@ -19,6 +19,7 @@ let filas = 4;
 let bloqueAncho = 100;
 let bloqueAlto = 30;
 let espacio = 5;
+let nivel = 1;
 
 function setup() {
   createCanvas(1200, 600);
@@ -93,6 +94,15 @@ function draw() {
       }
     }
 
+    // si ya no quedan bloques, subir de nivel
+    if (!quedanBloques()) {
+      nivel++;
+      filas = 4 + nivel - 1;
+      crearBloques();
+      reiniciar();
+      juegoPausado = true;
+    }
+
     //toca suelo
     if (pelotaY - pelotaRadio > height) {
       vidas = vidas - 1;
@@ -110,7 +120,7 @@ function draw() {
       textSize(40);
       text("presiona ESPACIO para iniciar", width / 2, height / 2);
       
-    } else {
+    } else if (vidas > 0){
       //desp de perder
       fill(255, 0, 0, 150);
       rect(0, 0, width, height);
@@ -118,10 +128,28 @@ function draw() {
       textAlign(CENTER, CENTER);
       fill(255);
       textSize(40);
+      text("te quedan " + vidas + " vidas", width / 2, height / 2 - 30);
+      text("¡presiona ESPACIO para seguir", width / 2, height / 2);
+    }else {
+      // sin vidas
+      fill(255, 0, 0, 150);
+      rect(0, 0, width, height);
+  
+      textAlign(CENTER, CENTER);
+      fill(255);
+      textSize(40);
       text("¡lol q mal! presiona ESPACIO para reiniciar", width / 2, height / 2);
     }
+
   }
+  // Vidas
+  fill(0);
+  textSize(20);
+  text("Vidas: " + vidas, 60, 20);
+  text("Nivel: " + nivel, width - 100, 20);
 }
+
+
 
 function keyPressed() {
   if (juegoPausado && key === ' ') {
@@ -136,6 +164,15 @@ function reiniciar() {
   pelotaY = barraY - pelotaRadio;
   velocidadPelotaX = 7;
   velocidadPelotaY = 7;
+}
+
+function quedanBloques() {
+  for (let fila of bloques) {
+    for (let bloque of fila) {
+      if (bloque.activo) return true;
+    }
+  }
+  return false;
 }
 
 function crearBloques() {
