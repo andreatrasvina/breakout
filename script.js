@@ -158,6 +158,17 @@ function draw() {
     } else if (nivel === 3 && puntaje === 90) {
       colorFondo = color(255, 255, 0, 150);
       mensaje = "¡Nivel 3! presiona ESPACIO para continuar";
+
+      //GANAR
+    } else if (vidas >= 1 && puntaje === 140) {
+      colorFondo = color(255, 255, 0, 150);
+      mensaje = "¡FELICIDADES GANASTE! presiona ESPACIO para reiniciar";
+
+      //perder para siemrpe
+    } else if (vidas === 0) {
+      colorFondo = color(255, 0, 0, 150);
+      mensaje = "PERDISTE PARA SIEMPRE, vuelve a intentarlo";
+    
     
     }else {
       //desp perder
