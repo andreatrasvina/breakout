@@ -1,6 +1,6 @@
 let barraX;
 let barraY = 550;
-let barraAncho = 500;
+let barraAncho = 1200;
 let barraAlto = 20;
 let velocidadBarra = 100;
 
@@ -57,6 +57,8 @@ function draw() {
       }
     }
   }
+
+  
   
   if (!juegoPausado) {
     //mov barra
@@ -144,31 +146,38 @@ function draw() {
     let colorFondo;
     let mensaje;
   
-    if (vidas === 3) {
+    if (vidas === 3 && puntaje === 0) {
       //inicio
       colorFondo = color(0, 255, 0, 150);
       mensaje = "presiona ESPACIO para jugar";
 
       //segundo nivel
-    } else if(nivel === 2 && puntaje === 40){
+    } else if(nivel === 2 && puntaje < 90 ) {
       colorFondo = color(0, 0, 255, 150);
       mensaje = "¡Nivel 2! presiona ESPACIO para continuar";
     
       //tercer nivel
-    } else if (nivel === 3 && puntaje === 90) {
+    } else if (nivel === 3 && puntaje > 90) {
       colorFondo = color(255, 255, 0, 150);
       mensaje = "¡Nivel 3! presiona ESPACIO para continuar";
 
       //GANAR
-    } else if (vidas >= 1 && puntaje === 140) {
-      colorFondo = color(255, 255, 0, 150);
+    } else if (vidas >= 1 && puntaje >= 140) {
+      colorFondo = color(0, 0, 0);
       mensaje = "¡FELICIDADES GANASTE! presiona ESPACIO para reiniciar";
 
+      if (keyIsPressed && key === ' ') {
+        reiniciarJuego();
+      }
+
       //perder para siemrpe
-    } else if (vidas === 0) {
+    } else if (vidas <= 0) {
       colorFondo = color(255, 0, 0, 150);
       mensaje = "PERDISTE PARA SIEMPRE, vuelve a intentarlo";
-    
+
+      if (keyIsPressed && key === ' ') {
+        reiniciarJuego();
+      }
     
     }else {
       //desp perder
@@ -210,6 +219,17 @@ function reiniciar() {
   let velocidadBase = 30 + nivel - 1;
   velocidadPelotaX = velocidadBase;
   velocidadPelotaY = velocidadBase;
+}
+
+function reiniciarJuego() {
+  puntaje = 0;
+  nivel = 1;
+  vidas = 3;
+
+  generarBloques(); 
+  reiniciar();
+
+  juegoPausado = true;
 }
 
 function quedanBloques() {
