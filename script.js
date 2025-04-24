@@ -1,6 +1,6 @@
 let barraX;
 let barraY = 550;
-let barraAncho = 1200;
+let barraAncho = 150;
 let barraAlto = 20;
 let velocidadBarra = 30;
 
