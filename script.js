@@ -1,6 +1,6 @@
 let barraX;
 let barraY = 550;
-let barraAncho = 200;
+let barraAncho = 1200;
 let barraAlto = 20;
 let velocidadBarra = 30;
 
@@ -158,7 +158,7 @@ function draw() {
       mensaje = "¡Nivel 2! presiona ESPACIO para continuar";
     
       //tercer nivel
-    } else if (nivel === 3 && puntaje > 90) {
+    } else if (nivel === 3 && puntaje >= 90) {
       colorFondo = color(255, 255, 0, 150);
       mensaje = "¡Nivel 3! presiona ESPACIO para continuar";
 
