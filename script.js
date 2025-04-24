@@ -13,8 +13,18 @@ let velocidadPelotaY;
 let juegoPausado = true;
 let vidas = 3;
 
+let bloques = [];
+let columnas = 10;
+let filas = 4;
+let bloqueAncho = 100;
+let bloqueAlto = 30;
+let espacio = 5;
+
 function setup() {
   createCanvas(1200, 600);
+
+  //aqui creamos nuestros bloques equis de
+  crearBloques();
   reiniciar();
 }
 
@@ -26,6 +36,16 @@ function draw() {
 
   //pelota
   ellipse(pelotaX, pelotaY, pelotaRadio * 2, pelotaRadio * 2);
+
+  // dibujamos nuestros bloques
+  for (let fila of bloques) {
+    for (let bloque of fila) {
+      if (bloque.activo) {
+        fill(150, 100, 200);
+        rect(bloque.x, bloque.y, bloqueAncho, bloqueAlto);
+      }
+    }
+  }
   
   if (!juegoPausado) {
     //mov BARRA
@@ -56,6 +76,23 @@ function draw() {
       pelotaY = barraY - pelotaRadio;
     }
 
+    // Colisiones con bloques
+    for (let fila of bloques) {
+      for (let bloque of fila) {
+        if (bloque.activo) {
+          if (
+            pelotaX + pelotaRadio > bloque.x &&
+            pelotaX - pelotaRadio < bloque.x + bloqueAncho &&
+            pelotaY + pelotaRadio > bloque.y &&
+            pelotaY - pelotaRadio < bloque.y + bloqueAlto
+          ) {
+            velocidadPelotaY *= -1;
+            bloque.activo = false;
+          }
+        }
+      }
+    }
+
     //toca suelo
     if (pelotaY - pelotaRadio > height) {
       vidas = vidas - 1;
@@ -72,6 +109,7 @@ function draw() {
       fill(255);
       textSize(40);
       text("presiona ESPACIO para iniciar", width / 2, height / 2);
+      
     } else {
       //desp de perder
       fill(255, 0, 0, 150);
@@ -98,4 +136,17 @@ function reiniciar() {
   pelotaY = barraY - pelotaRadio;
   velocidadPelotaX = 7;
   velocidadPelotaY = 7;
+}
+
+function crearBloques() {
+  bloques = [];
+  for (let f = 0; f < filas; f++) {
+    let fila = [];
+    for (let c = 0; c < columnas; c++) {
+      let x = c * (bloqueAncho + espacio) + 60;
+      let y = f * (bloqueAlto + espacio) + 40;
+      fila.push({ x, y, activo: true });
+    }
+    bloques.push(fila);
+  }
 }
