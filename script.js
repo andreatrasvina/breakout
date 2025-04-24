@@ -1,8 +1,8 @@
 let barraX;
 let barraY = 550;
-let barraAncho = 1200;
+let barraAncho = 200;
 let barraAlto = 20;
-let velocidadBarra = 100;
+let velocidadBarra = 30;
 
 let pelotaX;
 let pelotaY;
@@ -13,6 +13,7 @@ let velocidadPelotaY;
 let juegoPausado = true;
 let vidas = 3;
 let puntaje = 0;
+let juegoTerminado = false;
 
 let bloques = [];
 let columnas = 10;
@@ -146,13 +147,13 @@ function draw() {
     let colorFondo;
     let mensaje;
   
-    if (vidas === 3 && puntaje === 0) {
+    if (vidas === 3) {
       //inicio
       colorFondo = color(0, 255, 0, 150);
       mensaje = "presiona ESPACIO para jugar";
 
       //segundo nivel
-    } else if(nivel === 2 && puntaje < 90 ) {
+    } else if(nivel === 2 && puntaje === 40 ) {
       colorFondo = color(0, 0, 255, 150);
       mensaje = "¡Nivel 2! presiona ESPACIO para continuar";
     
@@ -165,19 +166,13 @@ function draw() {
     } else if (vidas >= 1 && puntaje >= 140) {
       colorFondo = color(0, 0, 0);
       mensaje = "¡FELICIDADES GANASTE! presiona ESPACIO para reiniciar";
-
-      if (keyIsPressed && key === ' ') {
-        reiniciarJuego();
-      }
+      juegoTerminado = true;
 
       //perder para siemrpe
     } else if (vidas <= 0) {
       colorFondo = color(255, 0, 0, 150);
       mensaje = "PERDISTE PARA SIEMPRE, vuelve a intentarlo";
-
-      if (keyIsPressed && key === ' ') {
-        reiniciarJuego();
-      }
+      juegoTerminado = true;
     
     }else {
       //desp perder
@@ -208,6 +203,10 @@ function keyPressed() {
     reiniciar();
     juegoPausado = false;
   }
+
+  if (juegoTerminado && key === ' ') {
+    location.reload(); 
+  }
 }
 
 function reiniciar() {
@@ -216,20 +215,9 @@ function reiniciar() {
   pelotaY = barraY - pelotaRadio;
   
   // cambiar velocidad segun el nivel xd
-  let velocidadBase = 30 + nivel - 1;
+  let velocidadBase = 10 + nivel - 1;
   velocidadPelotaX = velocidadBase;
   velocidadPelotaY = velocidadBase;
-}
-
-function reiniciarJuego() {
-  puntaje = 0;
-  nivel = 1;
-  vidas = 3;
-
-  generarBloques(); 
-  reiniciar();
-
-  juegoPausado = true;
 }
 
 function quedanBloques() {
