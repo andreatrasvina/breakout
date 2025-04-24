@@ -1,8 +1,8 @@
 let barraX;
 let barraY = 550;
-let barraAncho = 150;
+let barraAncho = 500;
 let barraAlto = 20;
-let velocidadBarra = 7;
+let velocidadBarra = 100;
 
 let pelotaX;
 let pelotaY;
@@ -43,14 +43,23 @@ function draw() {
   for (let fila of bloques) {
     for (let bloque of fila) {
       if (bloque.activo) {
-        fill(150, 100, 200);
+        // bloque que aguanta 3 fregazos
+        if (bloque.indestructible) {
+          fill(50, 50, 50);
+        } else if (bloque.resistencia && bloque.resistencia > 1) {
+          fill(255, 0, 0); // rojo para los bloques resistentes
+        } else if (bloque.fregazos > 1) {
+          fill(255, 0, 0); // rojo para los bloques resistentes (por si acaso)
+        } else {
+          fill(150, 100, 200);
+        }
         rect(bloque.x, bloque.y, bloqueAncho, bloqueAlto);
       }
     }
   }
   
   if (!juegoPausado) {
-    //mov BARRA
+    //mov barra
     if (keyIsDown(LEFT_ARROW)) {
       barraX -= velocidadBarra;
     }
@@ -78,7 +87,7 @@ function draw() {
       pelotaY = barraY - pelotaRadio;
     }
 
-    // Colisiones con bloques
+    //colisiones con bloques
     for (let fila of bloques) {
       for (let bloque of fila) {
         if (bloque.activo) {
@@ -89,8 +98,18 @@ function draw() {
             pelotaY - pelotaRadio < bloque.y + bloqueAlto
           ) {
             velocidadPelotaY *= -1;
-            bloque.activo = false;
             puntaje++;
+
+            //si el bloque es indestructible no hacemos nada xd
+            if (bloque.indestructible) {
+              // XD
+            } else {
+              // le reducimos fregazos
+              bloque.fregazos--;
+              if (bloque.fregazos <= 0) {
+                bloque.activo = false;
+              }
+            }
           }
         }
       }
@@ -99,6 +118,16 @@ function draw() {
     // si ya no quedan bloques, subir de nivel
     if (!quedanBloques()) {
       nivel++;
+
+      // se ajusta la velocidad dependiendo el nivel
+      if (nivel===2) {
+        velocidadPelotaX =9; 
+        velocidadPelotaY = 9;
+      } else if (nivel === 3) {
+        velocidadPelotaX =11; 
+        velocidadPelotaY =11;
+      }
+
       filas = 4 + nivel - 1;
       crearBloques();
       reiniciar();
@@ -154,8 +183,6 @@ function draw() {
   text("Score: " + puntaje, width / 2, 20);
 }
 
-
-
 function keyPressed() {
   if (juegoPausado && key === ' ') {
     reiniciar();
@@ -167,27 +194,66 @@ function reiniciar() {
   barraX = (width - barraAncho) / 2;
   pelotaX = width / 2;
   pelotaY = barraY - pelotaRadio;
-  velocidadPelotaX = 7;
-  velocidadPelotaY = 7;
+  
+  // cambiar velocidad segun el nivel xd
+  let velocidadBase = 30 + nivel - 1;
+  velocidadPelotaX = velocidadBase;
+  velocidadPelotaY = velocidadBase;
 }
 
 function quedanBloques() {
   for (let fila of bloques) {
     for (let bloque of fila) {
-      if (bloque.activo) return true;
+      if (bloque.activo && !bloque.indestructible) return true;
     }
   }
   return false;
 }
 
+
 function crearBloques() {
   bloques = [];
-  for (let f = 0; f < filas; f++) {
+
+  // se ajusta cantidad de filas dependiendo el nivel
+  let filasNivel = filas;
+  if (nivel === 2) filasNivel = 5; 
+  else if (nivel === 3) filasNivel = 6;
+
+  for (let f = 0; f < filasNivel; f++) {
     let fila = [];
     for (let c = 0; c < columnas; c++) {
       let x = c * (bloqueAncho + espacio) + 60;
       let y = f * (bloqueAlto + espacio) + 40;
-      fila.push({ x, y, activo: true });
+
+      let bloque = {
+        x,
+        y,
+        activo: true,
+        fregazos: 1, 
+        indestructible: false
+      };
+
+      // nivel 2: hay un bloque resistente, misma logica que al hacer un cuadrado hueco en primer semestre
+      if (nivel === 2) {
+        if (f === 4 && c === 5) {
+          bloque.fregazos = 3; // bloque resistente, aguanta 3 fregazos
+        }
+        if (f === 3 && c === 4) {
+          bloque.indestructible = true; // bloque indestructible en el nivel 2
+        }
+      }
+
+      //novel 3: 2 bloques resistentes y uno indestructible
+      if (nivel === 3) {
+        if ((f === 1 && c === 3) || (f === 4 && c === 6)) {
+          bloque.fregazos = 3; // bloques que aguantan tres fregazos
+        }
+        if (f === 3 && c === 5) {
+          bloque.indestructible = true; //bloque que no se puede destruir
+        }
+      }
+
+      fila.push(bloque);
     }
     bloques.push(fila);
   }
