@@ -20,8 +20,6 @@ let bloqueAncho = 100;
 let bloqueAlto = 30;
 let espacio = 5;
 let nivel = 1;
-let juegoGanado = false;
-
 
 function setup() {
   createCanvas(1200, 600);
@@ -96,20 +94,14 @@ function draw() {
       }
     }
 
-    // si ya no quedan bloques, subir de nivel o terminar juego
+    // si ya no quedan bloques, subir de nivel
     if (!quedanBloques()) {
-      if (nivel < 3) {
-        nivel++;
-        filas = 4 + nivel - 1;
-        crearBloques();
-        reiniciar();
-        juegoPausado = true;
-      } else {
-        juegoGanado = true;
-        juegoPausado = true;
-      }
+      nivel++;
+      filas = 4 + nivel - 1;
+      crearBloques();
+      reiniciar();
+      juegoPausado = true;
     }
-
 
     //toca suelo
     if (pelotaY - pelotaRadio > height) {
@@ -160,14 +152,7 @@ function draw() {
 
 
 function keyPressed() {
-  if (key === ' ') {
-    if (vidas === 0 || juegoGanado) {
-      // reiniciar juego completo
-      vidas = 3;
-      nivel = 1;
-      filas = 4;
-      juegoGanado = false;
-    }
+  if (juegoPausado && key === ' ') {
     reiniciar();
     juegoPausado = false;
   }
