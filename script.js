@@ -12,6 +12,7 @@ let velocidadPelotaY;
 
 let juegoPausado = true;
 let vidas = 3;
+let puntaje = 0;
 
 let bloques = [];
 let columnas = 10;
@@ -89,6 +90,7 @@ function draw() {
           ) {
             velocidadPelotaY *= -1;
             bloque.activo = false;
+            puntaje++;
           }
         }
       }
@@ -120,18 +122,8 @@ function draw() {
       textSize(40);
       text("presiona ESPACIO para iniciar", width / 2, height / 2);
       
-    } else if (vidas > 0){
-      //desp de perder
-      fill(255, 0, 0, 150);
-      rect(0, 0, width, height);
-
-      textAlign(CENTER, CENTER);
-      fill(255);
-      textSize(40);
-      text("te quedan " + vidas + " vidas", width / 2, height / 2 - 30);
-      text("¡presiona ESPACIO para seguir", width / 2, height / 2);
     }else {
-      // sin vidas
+      //desp de perder
       fill(255, 0, 0, 150);
       rect(0, 0, width, height);
   
@@ -147,6 +139,7 @@ function draw() {
   textSize(20);
   text("Vidas: " + vidas, 60, 20);
   text("Nivel: " + nivel, width - 100, 20);
+  text("Score: " + puntaje, width / 2, 20);
 }
 
 
