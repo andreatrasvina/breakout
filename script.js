@@ -2,19 +2,20 @@ let barraX;
 let barraY = 550;
 let barraAncho = 150;
 let barraAlto = 20;
-let velocidad = 5;
+let velocidadBarra = 7;
 
 let pelotaX;
 let pelotaY;
 let pelotaRadio = 10;
-let randomX = 4;
-let randomY = -4;
+let velocidadPelotaX;
+let velocidadPelotaY;
+
+let juegoPausado = true;
+let vidas = 3;
 
 function setup() {
   createCanvas(1200, 600);
-  barraX = (width - barraAncho) / 2;
-  pelotaX = width / 2;
-  pelotaY = barraY - pelotaRadio;
+  reiniciar();
 }
 
 function draw() {
@@ -26,37 +27,68 @@ function draw() {
   //pelota
   ellipse(pelotaX, pelotaY, pelotaRadio * 2, pelotaRadio * 2);
   
-  //mov BARRA
-  if (keyIsDown(LEFT_ARROW)) {
-    barraX -= velocidad;
-  }
-  if (keyIsDown(RIGHT_ARROW)) {
-    barraX += velocidad;
-  }
-  //limite
-  barraX = Math.max(0, Math.min(barraX, width - barraAncho));
+  if (!juegoPausado) {
+    //mov BARRA
+    if (keyIsDown(LEFT_ARROW)) {
+      barraX -= velocidadBarra;
+    }
+    if (keyIsDown(RIGHT_ARROW)) {
+      barraX += velocidadBarra;
+    }
+    //limite
+    barraX = Math.max(0, Math.min(barraX, width - barraAncho));
 
-  //mov PELOTA
-  pelotaX += randomX;
-  pelotaY += randomY;
+    //mov PELOTA
+    pelotaX += velocidadPelotaX;
+    pelotaY += velocidadPelotaY;
 
-  //paredes
-  if (pelotaX - pelotaRadio <= 0 || pelotaX + pelotaRadio >= width) {
-    randomX *= -1;
-  }
-  if (pelotaY - pelotaRadio <= 0) {
-    randomY *= -1;
-  }
+    //paredes
+    if (pelotaX - pelotaRadio <= 0 || pelotaX + pelotaRadio >= width) {
+      velocidadPelotaX *= -1;
+    }
+    if (pelotaY - pelotaRadio <= 0) {
+      velocidadPelotaY *= -1;
+    }
 
-  //barra
-  if (pelotaY + pelotaRadio >= barraY && pelotaX >= barraX && pelotaX <= barraX + barraAncho) {
-    randomY *= -1;
-    pelotaY = barraY - pelotaRadio;
-  }
+    //barra
+    if (pelotaY + pelotaRadio >= barraY && pelotaX >= barraX && pelotaX <= barraX + barraAncho) {
+      velocidadPelotaY *= -1;
+      pelotaY = barraY - pelotaRadio;
+    }
 
-  //toca suelo
-  if (pelotaY - pelotaRadio > height) {
+    //toca suelo
+    if (pelotaY - pelotaRadio > height) {
+      vidas = vidas - 1;
+      juegoPausado = true;
+    }
+
+  } else {
+    if (vidas === 3) {
+      //inicio
+      fill(0, 255, 0, 150);
+      rect(0, 0, width, height);
+      
+      textAlign(CENTER, CENTER);
+      fill(255);
+      textSize(40);
+      text("presiona ESPACIO para iniciar", width / 2, height / 2);
+    } else {
+      //desp de perder
+      fill(255, 0, 0, 150);
+      rect(0, 0, width, height);
+
+      textAlign(CENTER, CENTER);
+      fill(255);
+      textSize(40);
+      text("¡lol q mal! presiona ESPACIO para reiniciar", width / 2, height / 2);
+    }
+  }
+}
+
+function keyPressed() {
+  if (juegoPausado && key === ' ') {
     reiniciar();
+    juegoPausado = false;
   }
 }
 
@@ -64,6 +96,6 @@ function reiniciar() {
   barraX = (width - barraAncho) / 2;
   pelotaX = width / 2;
   pelotaY = barraY - pelotaRadio;
-  velocidadX = 4;
-  velocidadY = -4;
+  velocidadPelotaX = 7;
+  velocidadPelotaY = 7;
 }
